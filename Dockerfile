@@ -22,6 +22,9 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
+# Install dependencies needed for native modules (bcrypt, pg)
+RUN apk add --no-cache libc6-compat python3 make g++ postgresql-libs
+
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
@@ -32,9 +35,22 @@ COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 RUN mkdir -p .next
 RUN chown nextjs:nodejs .next
 
-# Automatically leverage output traces to reduce image size
+# Copy standalone output (includes most dependencies but not native modules)
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# Copy native modules that standalone doesn't include properly
+# Create node_modules directory first
+RUN mkdir -p node_modules
+
+# bcrypt needs native bindings (Alpine musl compatible)
+COPY --from=deps --chown=nextjs:nodejs /app/node_modules/bcrypt ./node_modules/bcrypt
+# pg needs native bindings
+COPY --from=deps --chown=nextjs:nodejs /app/node_modules/pg ./node_modules/pg
+# Copy pg dependencies
+COPY --from=deps --chown=nextjs:nodejs /app/node_modules/pg-types ./node_modules/pg-types
+COPY --from=deps --chown=nextjs:nodejs /app/node_modules/pg-protocol ./node_modules/pg-protocol
+COPY --from=deps --chown=nextjs:nodejs /app/node_modules/pg-connection-string ./node_modules/pg-connection-string
 
 USER nextjs
 
