@@ -1,8 +1,9 @@
-import pool from '../lib/db';
+import getPool from '../lib/db';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
 async function setupDatabase() {
+  const pool = getPool();
   const client = await pool.connect();
   
   try {

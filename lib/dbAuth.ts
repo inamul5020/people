@@ -1,4 +1,4 @@
-import pool from './db';
+import getPool from './db';
 import bcrypt from 'bcrypt';
 
 export interface AdminUser {
@@ -16,6 +16,7 @@ export async function verifyAdminCredentials(
   password: string
 ): Promise<{ valid: boolean; user?: AdminUser }> {
   try {
+    const pool = getPool();
     const result = await pool.query(
       'SELECT id, username, password_hash, is_active FROM admin_users WHERE username = $1 AND is_active = TRUE',
       [username]
@@ -47,6 +48,7 @@ export async function createAdminUser(
   password: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
+    const pool = getPool();
     const passwordHash = await bcrypt.hash(password, 10);
 
     await pool.query(
@@ -66,6 +68,7 @@ export async function createAdminUser(
  */
 export async function initializeDefaultAdmin(): Promise<void> {
   try {
+    const pool = getPool();
     const result = await pool.query(
       'SELECT COUNT(*) as count FROM admin_users WHERE username = $1',
       ['admin']

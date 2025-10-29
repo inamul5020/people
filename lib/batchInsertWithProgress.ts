@@ -1,4 +1,4 @@
-import pool from './db';
+import getPool from './db';
 import { DemographicRecord } from './fileParser';
 import { parseDate } from './fileParser';
 
@@ -63,6 +63,7 @@ export async function batchInsertRecordsWithProgress(
 }
 
 async function insertBatch(records: DemographicRecord[]): Promise<number> {
+  const pool = getPool();
   const client = await pool.connect();
   
   try {

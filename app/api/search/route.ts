@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth';
-import pool from '@/lib/db';
+import getPool from '@/lib/db';
 
 export async function GET(request: NextRequest) {
   try {
     // Check authentication
     await requireAuth();
 
+    const pool = getPool();
     const searchParams = request.nextUrl.searchParams;
     const page = parseInt(searchParams.get('page') || '1', 10);
     const limit = parseInt(searchParams.get('limit') || '50', 10);
