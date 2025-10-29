@@ -58,6 +58,25 @@ ADMIN_PASSWORD=admin786@@@
 SESSION_SECRET=your-secret-key-change-this-to-random-string
 ```
 
+**⚠️ IMPORTANT: Database Credentials**
+
+You MUST use **REAL database credentials**, not placeholders!
+
+**Getting Database URL:**
+
+1. **If using Coolify PostgreSQL service:**
+   - Create PostgreSQL resource in Coolify
+   - Coolify will provide connection details
+   - Format: `postgresql://username:password@service-name:5432/demographic_db`
+   - Example: `postgresql://postgres:mypassword123@demographic-postgres:5432/demographic_db`
+
+2. **If using external PostgreSQL:**
+   - Use your existing database credentials
+   - Format: `postgresql://username:password@host:port/database`
+   - Example: `postgresql://myuser:mypass@192.168.1.100:5432/demographic_db`
+
+See [COOLIFY_SETUP.md](./COOLIFY_SETUP.md) for detailed setup instructions.
+
 **Important Note about PORT:**
 - **Do NOT set PORT manually** - Coolify automatically sets this based on your application configuration
 - Coolify will automatically inject the PORT environment variable
