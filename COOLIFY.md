@@ -48,8 +48,13 @@ DATABASE_URL=postgresql://username:password@host:port/demographic_db
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=admin786@@@
 SESSION_SECRET=your-secret-key-change-this-to-random-string
-PORT=3000
 ```
+
+**Important Note about PORT:**
+- **Do NOT set PORT manually** - Coolify automatically sets this based on your application configuration
+- Coolify will automatically inject the PORT environment variable
+- The Dockerfile defaults to PORT=3000, but Coolify will override this with the correct port
+- Next.js standalone output automatically uses the PORT from environment
 
 #### Database Setup
 
