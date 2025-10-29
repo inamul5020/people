@@ -40,7 +40,7 @@ export default function SearchResults() {
     const currentOrder = searchParams.sortOrder || 'ASC';
     
     let newSortBy = column;
-    let newSortOrder = 'ASC';
+    let newSortOrder: 'ASC' | 'DESC' = 'ASC';
     
     if (currentSort === column) {
       newSortOrder = currentOrder === 'ASC' ? 'DESC' : 'ASC';

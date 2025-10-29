@@ -47,7 +47,7 @@ export default function SearchForm() {
   };
 
   const handleReset = () => {
-    const emptyParams = {
+    const emptyParams: typeof localParams = {
       firstName: '',
       lastName: '',
       city: '',
@@ -57,7 +57,7 @@ export default function SearchForm() {
       dateOfBirth: '',
       search: '',
       sortBy: 'id',
-      sortOrder: 'ASC',
+      sortOrder: 'ASC' as 'ASC' | 'DESC',
     };
     setLocalParams(emptyParams);
     setSearchParams(emptyParams);
