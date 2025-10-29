@@ -2,6 +2,14 @@
 
 This guide will help you deploy the Demographic Data Search Application on Coolify at `people.kebazz.com`.
 
+## Deployment Options
+
+You have two options:
+1. **Build from Git** (default) - Coolify builds from your repository
+2. **Use Docker Hub Image** (recommended if builds fail) - Build locally and push to Docker Hub
+
+See [DOCKER_BUILD.md](./DOCKER_BUILD.md) for Docker Hub deployment instructions.
+
 ## Prerequisites
 
 1. Coolify instance running and accessible
