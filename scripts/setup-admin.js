@@ -1,4 +1,10 @@
-require('dotenv').config();
+// Try to load dotenv if available (not required in production)
+try {
+  require('dotenv').config();
+} catch (e) {
+  // dotenv not available, use environment variables directly
+}
+
 const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
 

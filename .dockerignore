@@ -43,8 +43,8 @@ Dockerfile
 README.md
 *.md
 
-# Scripts (keep these if needed for runtime, but usually not)
-scripts
+# Scripts (commented out - needed for PostgreSQL-included version)
+# scripts
 
 # Database migrations (keep SQL files, they might be needed)
 # database/*.sql
