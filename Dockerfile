@@ -13,6 +13,9 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 # Create public directory if it doesn't exist
 RUN mkdir -p public
+# Ensure next-env.d.ts exists (Next.js will generate it if missing)
+RUN touch next-env.d.ts || true
+# Run build
 RUN npm run build
 
 # Production image, copy all the files and run next
