@@ -3,6 +3,10 @@ import { requireAuth } from '@/lib/auth';
 import { parseDemographicFile } from '@/lib/fileParser';
 import { batchInsertRecordsWithProgress } from '@/lib/batchInsertWithProgress';
 
+// Configure route for file uploads
+export const runtime = 'nodejs';
+export const maxDuration = 300; // 5 minutes for large files
+
 export async function POST(request: NextRequest) {
   try {
     // Check authentication
@@ -21,6 +25,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check file size (limit to 100MB)
+    const maxSize = 100 * 1024 * 1024; // 100MB
+    if (file.size > maxSize) {
+      return new Response(
+        JSON.stringify({ error: `File too large. Maximum size is 100MB. File size: ${(file.size / 1024 / 1024).toFixed(2)}MB` }),
+        {
+          status: 400,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
+    console.log(`Import started: File name: ${file.name}, Size: ${(file.size / 1024 / 1024).toFixed(2)}MB`);
+
     // Create a readable stream for Server-Sent Events
     const stream = new ReadableStream({
       async start(controller) {
@@ -36,7 +54,9 @@ export async function POST(request: NextRequest) {
           send({ type: 'start', message: 'Reading file...' });
 
           // Read file content
+          console.log('Reading file content...');
           const content = await file.text();
+          console.log(`File read: ${content.length} characters`);
           send({ type: 'progress', message: 'Parsing file...', progress: 10 });
 
           // Parse the file
@@ -104,9 +124,11 @@ export async function POST(request: NextRequest) {
 
           controller.close();
         } catch (error: any) {
+          console.error('Import error:', error);
           send({
             type: 'error',
             error: error.message || 'Internal server error',
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
           });
           controller.close();
         }

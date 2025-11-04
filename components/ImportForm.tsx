@@ -54,14 +54,18 @@ export default function ImportForm() {
       const response = await fetch('/api/import/stream', {
         method: 'POST',
         body: formData,
+        // Don't set Content-Type header - browser will set it with boundary
       });
 
       if (!response.ok) {
         try {
           const errorData = await response.json();
-          setError(errorData.error || 'Import failed');
+          console.error('Import error response:', errorData);
+          setError(errorData.error || `Import failed: ${response.status} ${response.statusText}`);
         } catch {
-          setError('Import failed: ' + response.statusText);
+          const text = await response.text();
+          console.error('Import error (non-JSON):', text);
+          setError(`Import failed: ${response.status} ${response.statusText}. ${text.substring(0, 200)}`);
         }
         setLoading(false);
         setProgress(null);
@@ -112,8 +116,10 @@ export default function ImportForm() {
         }
       }
     } catch (err: any) {
-      setError(err.message || 'Network error. Please try again.');
+      console.error('Import exception:', err);
+      setError(err.message || 'Network error. Please check the browser console for details.');
       setLoading(false);
+      setProgress(null);
     }
   };
 
