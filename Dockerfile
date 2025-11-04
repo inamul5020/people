@@ -54,11 +54,12 @@ COPY --from=deps --chown=nextjs:nodejs /app/node_modules/pg-connection-string ./
 
 USER nextjs
 
-# Coolify will set PORT environment variable
+# PORT will be set via environment variable by Coolify
+# Default to 3000 (Next.js default) but Coolify will override
 EXPOSE 3000
 
-ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
+ENV PORT=3000
 
 CMD ["node", "server.js"]
 
