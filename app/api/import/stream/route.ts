@@ -5,7 +5,7 @@ import { batchInsertRecordsWithProgress } from '@/lib/batchInsertWithProgress';
 
 // Configure route for file uploads
 export const runtime = 'nodejs';
-export const maxDuration = 300; // 5 minutes for large files
+export const maxDuration = 600; // 10 minutes for large files (500MB)
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,11 +25,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check file size (limit to 100MB)
-    const maxSize = 100 * 1024 * 1024; // 100MB
+    // Check file size (limit to 500MB)
+    const maxSize = 500 * 1024 * 1024; // 500MB
     if (file.size > maxSize) {
       return new Response(
-        JSON.stringify({ error: `File too large. Maximum size is 100MB. File size: ${(file.size / 1024 / 1024).toFixed(2)}MB` }),
+        JSON.stringify({ error: `File too large. Maximum size is 500MB. File size: ${(file.size / 1024 / 1024).toFixed(2)}MB` }),
         {
           status: 400,
           headers: { 'Content-Type': 'application/json' },
