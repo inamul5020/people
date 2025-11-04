@@ -49,7 +49,7 @@ services:
       - "coolify.managed=true"
       - "coolify.name=demographic-search-app"
       - "coolify.port=3000"
-      - "coolify.healthcheck=/api/auth/check"
+      - "coolify.healthcheck=/api/health"
 
 volumes:
   postgres_data:
