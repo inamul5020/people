@@ -30,8 +30,6 @@ services:
     restart: unless-stopped
     expose:
       - "3000"
-    ports:
-      - "${PORT:-3000}:3000"
     environment:
       - DATABASE_URL=postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-demographic_db}
       - NODE_ENV=${NODE_ENV:-production}
