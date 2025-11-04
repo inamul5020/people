@@ -5,7 +5,7 @@ import { batchInsertRecordsWithProgress } from '@/lib/batchInsertWithProgress';
 
 // Configure route for file uploads
 export const runtime = 'nodejs';
-export const maxDuration = 600; // 10 minutes for large files (500MB)
+export const maxDuration = 3600; // 1 hour for very large files (500MB)
 
 export async function POST(request: NextRequest) {
   try {
