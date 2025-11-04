@@ -10,11 +10,16 @@ RUN npm ci
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
+# Copy package files first to ensure they're present
+COPY package.json package-lock.json* ./
+# Copy all source files
 COPY . .
 # Create public directory if it doesn't exist
 RUN mkdir -p public
 # Ensure next-env.d.ts exists (Next.js will generate it if missing)
 RUN touch next-env.d.ts || true
+# Verify key files exist before build
+RUN ls -la tsconfig.json next.config.js package.json || echo "Warning: Some files missing"
 # Run build
 RUN npm run build
 
